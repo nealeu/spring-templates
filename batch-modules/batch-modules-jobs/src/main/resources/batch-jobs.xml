@@ -1,0 +1,44 @@
+<beans:beans xmlns="http://www.springframework.org/schema/batch"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+             xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:mbean-export/>
+	<context:mbean-server/>
+
+	<beans:bean id="neverRetryPolicy" class="org.springframework.batch.retry.policy.NeverRetryPolicy"/>
+
+    <job id="testJob">
+        <step id="firstStep" >
+            <tasklet transaction-manager="dataTxManager" task-executor="taskExecutor">
+                <chunk reader="jpaOrderitemReader" processor="pricingProcessor" writer="jpaWriter"
+                       commit-interval="10" retry-policy="neverRetryPolicy"/>
+            </tasklet>
+        </step>
+    </job>
+
+
+    <beans:bean id="jpaOrderitemReader" class="org.springframework.batch.item.database.JpaPagingItemReader">
+        <beans:property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <beans:property name="queryString" value="select o from Order o order by id"/>
+        <beans:property name="pageSize" value="10"/>
+    </beans:bean>
+
+
+    <beans:bean id="jpaWriter" class="org.springframework.batch.item.database.JpaItemWriter">
+        <beans:property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </beans:bean>
+
+    <beans:bean id="pricingProcessor" class="org.springframework.batch.item.adapter.ItemProcessorAdapter">
+        <beans:property name="targetObject" ref="pricingService"/>
+        <beans:property name="targetMethod" value="priceOrder"/>
+    </beans:bean>
+
+</beans:beans>
