@@ -14,13 +14,16 @@
 	<bean id="dataTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="dataSource" ref="dataDb" />
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="jpaDialect">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+		</property>
 	</bean>
 
 <!-- 	<jdbc:embedded-database id="dataDb" type="H2" /> -->
 
 	<bean id="dataDb" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 	    <property name="driverClass" value="org.h2.Driver" />
-	    <property name="url" value="jdbc:h2:mem" />
+	    <property name="url" value="jdbc:h2:mem:" />
 	    <property name="username" value="sa" />
 	    <property name="password" value="" />
 <!-- 	    <property name="validationQuery" value="SELECT 1" /> -->
@@ -35,7 +38,6 @@
 		<jdbc:script location="classpath:/org/springframework/batch/core/schema-drop-h2.sql"/>
 		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql"/>
 	</jdbc:initialize-database>
-
 
 	<bean id="jobTxManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

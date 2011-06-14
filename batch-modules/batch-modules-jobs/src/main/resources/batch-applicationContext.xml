@@ -5,8 +5,8 @@
 
 	<import resource="batch-concurrent.xml"/>
 	<import resource="batch-jobs.xml"/>
-	<import resource="batch-infrastructure.xml"/>
-<!-- 	<import resource="batch-infrastructure-single.xml"/> -->
+<!-- 	<import resource="batch-infrastructure.xml"/> -->
+	<import resource="batch-infrastructure-single.xml"/>
 	<import resource="hibernate-config.xml"/>
 	<import resource="services.xml"/>
 
