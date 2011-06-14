@@ -13,16 +13,16 @@
 
 	<description>Import your job contexts here.  They just need to define a job</description>
 	
-	<context:property-placeholder order="1" location="classpath:batch-h2.properties" ignore-unresolvable="true" />
-	<import resource="classpath:services.xml"/>
+	<context:property-placeholder order="1" location="classpath*:batch-h2.properties" ignore-unresolvable="true" />
+	<import resource="classpath*:services.xml"/>
 
 	<!-- Alias the things we otherwise provide in batch-infrastructure.xml -->
 	<alias alias="dataDb" name="dataSource"/>
 	<alias alias="dataTxManager" name="transactionManager" />
 	
-	<import resource="classpath:batch-jobs.xml"/>
-	<import resource="classpath:batch-concurrent.xml"/>
-	<import resource="classpath:hibernate-config.xml"/>
+	<import resource="classpath*:batch-jobs.xml"/>
+	<import resource="classpath*:batch-concurrent.xml"/>
+	<import resource="classpath*:hibernate-config.xml"/>
 
 <!-- 
 	<bean id="remoteStep1" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
