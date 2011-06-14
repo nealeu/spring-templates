@@ -11,6 +11,7 @@
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
+
 	<bean id="dataTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="dataSource" ref="dataDb" />
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
@@ -20,11 +21,15 @@
 	</bean>
 
 
-	<jdbc:embedded-database id="jobDb" type="H2">
-		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql" />
-	</jdbc:embedded-database>
+	<jdbc:embedded-database id="dataSource" type="H2"/> <!-- Overrides default that Spring Batch Admin may have defined -->
 
-	<alias alias="dataDb" name="jobDb" />
+	<alias alias="dataDb" name="dataSource" />
+	<alias alias="jobDb" name="dataSource" />  
+
+	<jdbc:initialize-database data-source="jobDb" enabled="true" ignore-failures="DROPS">
+		<jdbc:script location="classpath:/org/springframework/batch/core/schema-drop-h2.sql"/>
+		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql"/>
+	</jdbc:initialize-database>
 
 	<alias alias="jobTxManager" name="dataTxManager" />
 
@@ -35,12 +40,4 @@
 
 	<batch:job-repository id="jobRepository" data-source="jobDb"
 		transaction-manager="jobTxManager" isolation-level-for-create="DEFAULT"/> 
-
-
-	<bean id="taskExecutor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-		<property name="corePoolSize" value="4" />
-		<property name="maxPoolSize" value="4" />
-	</bean>
-
 </beans>

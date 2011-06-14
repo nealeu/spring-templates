@@ -24,7 +24,7 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @RunWith(value = SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/batch-infrastructure.xml", "classpath:/batch-jobs.xml", "classpath:/hibernate-config.xml", "classpath:/services.xml"})
+@ContextConfiguration(locations = {"classpath:/batch-applicationContext.xml"})
 public class SimpleBatchTest {
 
     Logger logger = LoggerFactory.getLogger(getClass());
@@ -40,7 +40,7 @@ public class SimpleBatchTest {
 
     TransactionTemplate dataTxTemplate;
 
-    int orderCount = 100;
+    int orderCount = 40;
 
     @Autowired
     public void setTransactionManager(JpaTransactionManager txManager) {

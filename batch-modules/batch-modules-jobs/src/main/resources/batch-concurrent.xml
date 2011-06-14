@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd">
+
+
+	<description>
+		Configures the task executor.  Have a look at what happens when you vary core pool size, and see
+		how this interacts with the throttle-limit of tasklet in batch-jobs.xml
+	</description>
+
+	<bean id="rejectedExecutionHandler" class="org.opencredo.batch.modules.concurrent.SimpleRejectedExecutionHandler"/>
+
+
+	<!-- DISCARD is interesting.. we end up with the test not exiting (which could be a bug in SB??)
+	     CALLER_RUNS:  -->
+<!-- 	<task:executor id="taskExecutor" keep-alive="20" pool-size="5-10" queue-capacity="1" rejection-policy="CALLER_RUNS"/> -->
+
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="5" />
+		<property name="maxPoolSize" value="10" />
+		<property name="rejectedExecutionHandler" ref="rejectedExecutionHandler"/>
+		<property name="queueCapacity" value="1" />
+	</bean>
+
+</beans>

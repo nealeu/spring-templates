@@ -15,6 +15,9 @@
 	
 	<context:property-placeholder order="1" location="classpath:batch-h2.properties" ignore-unresolvable="true" />
 	<import resource="classpath:batch-jobs.xml"/>
+	<import resource="classpath:batch-concurrent.xml"/>
+	
+	<!-- TODO: Need to clean up what we do and don't want when batch admin is in charge -->
 	<import resource="classpath:hibernate-config.xml"/>
 	<import resource="classpath:batch-infrastructure-single.xml"/>
 	<import resource="classpath:services.xml"/>

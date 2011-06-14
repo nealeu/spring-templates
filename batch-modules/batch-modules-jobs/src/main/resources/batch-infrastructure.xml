@@ -20,7 +20,7 @@
 
 	<bean id="dataDb" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 	    <property name="driverClass" value="org.h2.Driver" />
-	    <property name="url" value="jdbc:h2:file:/dev/datadb" />
+	    <property name="url" value="jdbc:h2:mem" />
 	    <property name="username" value="sa" />
 	    <property name="password" value="" />
 <!-- 	    <property name="validationQuery" value="SELECT 1" /> -->
@@ -29,10 +29,12 @@
 <!-- 	    <property name="maxWait" value="5000" /> -->
 	</bean>
 	
-
-	<jdbc:embedded-database id="jobDb" type="H2">
-		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql" />
-	</jdbc:embedded-database>
+	<jdbc:embedded-database id="jobDb" type="H2"/>
+	
+	<jdbc:initialize-database data-source="jobDb" enabled="true" ignore-failures="DROPS">
+		<jdbc:script location="classpath:/org/springframework/batch/core/schema-drop-h2.sql"/>
+		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql"/>
+	</jdbc:initialize-database>
 
 
 	<bean id="jobTxManager"
@@ -47,12 +49,4 @@
 
 	<batch:job-repository id="jobRepository" data-source="jobDb"
 		transaction-manager="jobTxManager" />
-
-
-	<bean id="taskExecutor"
-		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-		<property name="corePoolSize" value="4" />
-		<property name="maxPoolSize" value="40" />
-	</bean>
-
 </beans>

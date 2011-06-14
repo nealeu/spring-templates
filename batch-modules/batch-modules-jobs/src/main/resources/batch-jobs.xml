@@ -17,9 +17,9 @@
 
     <job id="testJob">
         <step id="firstStep" >
-            <tasklet transaction-manager="dataTxManager" task-executor="taskExecutor">
+            <tasklet transaction-manager="dataTxManager" task-executor="taskExecutor" throttle-limit="50">
                 <chunk reader="jpaOrderitemReader" processor="pricingProcessor" writer="jpaWriter"
-                       commit-interval="10" retry-policy="neverRetryPolicy"/>
+                       commit-interval="20" retry-policy="neverRetryPolicy"/>
             </tasklet>
         </step>
     </job>
