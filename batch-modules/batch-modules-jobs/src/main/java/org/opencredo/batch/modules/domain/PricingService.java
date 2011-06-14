@@ -24,8 +24,8 @@ public class PricingService {
 
 	private AtomicBoolean throwOnNext = new AtomicBoolean();
 
+	
     public Order priceOrder(Order unpriced) {
-        logger.info("Pricing " + unpriced.toString());
         unpriced.setPrice(new BigDecimal(rand.nextDouble()));
         unpriced.setStatus(OrderStatus.PRICED);
         logger.info(unpriced.toString() + " count is " + pricedCount.incrementAndGet());
@@ -49,5 +49,4 @@ public class PricingService {
     public void throwCollisionExceptionOnNextProcess() {
     	throwOnNext.set(true);
     }
-
 }
