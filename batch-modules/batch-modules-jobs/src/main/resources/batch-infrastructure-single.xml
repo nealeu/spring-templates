@@ -21,10 +21,21 @@
 
 	<jdbc:embedded-database id="dataSource" type="H2"/> <!-- Overrides default that Spring Batch Admin may have defined -->
 
+
+	<!-- Alternative definition to be used when want multiple application contexts using same database -->
+<!-- 	<bean id="dataSource" -->
+<!-- 		class="org.springframework.jdbc.datasource.SimpleDriverDataSource"> -->
+<!-- 		<property name="driverClass" value="org.h2.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:h2:shared-data;AUTO_SERVER=TRUE" /> -->
+<!-- 		<property name="username" value="sa" /> -->
+<!-- 		<property name="password" value="" /> -->
+<!-- 	</bean> -->
+
+
 	<alias alias="dataDb" name="dataSource" />
 	<alias alias="jobDb" name="dataSource" />  
 
-	<jdbc:initialize-database data-source="jobDb" enabled="true" ignore-failures="DROPS">
+	<jdbc:initialize-database data-source="jobDb" enabled="${initDbSchemas:true}" ignore-failures="DROPS">
 		<jdbc:script location="classpath:/org/springframework/batch/core/schema-drop-h2.sql"/>
 		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql"/>
 	</jdbc:initialize-database>
@@ -36,6 +47,6 @@
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
 
-	<batch:job-repository id="jobRepository" data-source="jobDb"
-		transaction-manager="jobTxManager" isolation-level-for-create="DEFAULT"/> 
+ 	<batch:job-repository id="jobRepository" data-source="jobDb" 
+ 		transaction-manager="jobTxManager" isolation-level-for-create="DEFAULT" />
 </beans>
