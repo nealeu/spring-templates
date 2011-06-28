@@ -28,8 +28,8 @@
 	<!-- See http://static.springsource.org/spring-batch/reference/html-single/index.html#abstractStep -->
 	<step id="parentStep" abstract="true">
 		<tasklet transaction-manager="dataTxManager" task-executor="taskExecutor"
-			throttle-limit="50">
-			<chunk commit-interval="20" retry-policy="neverRetryPolicy" />
+			throttle-limit="${throttleLimit}">
+			<chunk commit-interval="${commitInterval}" retry-policy="neverRetryPolicy" />
 		</tasklet>
 	</step>
 

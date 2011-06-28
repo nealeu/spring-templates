@@ -58,7 +58,7 @@ public class TwoServerBatchTest {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	private int orderCount = 400;
+	private int orderCount = 40;
 
 	TransactionTemplate dataTxTemplate;
 

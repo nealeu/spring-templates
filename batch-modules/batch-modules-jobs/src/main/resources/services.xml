@@ -11,6 +11,6 @@
     	p:jobName="#{jobName}" p:stepName="#{stepName}"/>
 	 -->
     <bean id="pricingProcessor" class="org.opencredo.batch.modules.processor.PricingProcessor" 
-    	p:jobName="%{jobName}" p:stepName="%{stepName}" p:pricingService-ref="pricingService" />
+    	p:jobName="nonScopedJobName" p:stepName="nonScopedStepName" p:pricingService-ref="pricingService" />
 
 </beans>
