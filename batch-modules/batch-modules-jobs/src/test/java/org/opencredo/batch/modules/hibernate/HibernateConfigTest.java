@@ -17,7 +17,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/hibernate-config.xml", "classpath:/batch-infrastructure.xml"})
+@ContextConfiguration(locations = {"classpath:/batch-property-placeholders.xml", "classpath:/hibernate-config.xml", "classpath:/batch-infrastructure-single.xml"})
 @Transactional
 @TransactionConfiguration(transactionManager = "dataTxManager")
 public class HibernateConfigTest {
