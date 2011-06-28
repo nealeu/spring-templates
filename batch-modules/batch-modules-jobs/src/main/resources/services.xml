@@ -6,7 +6,11 @@
 
     <bean id="pricingService" class="org.opencredo.batch.modules.domain.PricingService" />
 
+	<!-- 
     <bean id="pricingProcessor" scope="step" class="org.opencredo.batch.modules.processor.PricingProcessor" 
     	p:jobName="#{jobName}" p:stepName="#{stepName}"/>
+	 -->
+    <bean id="pricingProcessor" class="org.opencredo.batch.modules.processor.PricingProcessor" 
+    	p:jobName="%{jobName}" p:stepName="%{stepName}" p:pricingService-ref="pricingService" />
 
 </beans>

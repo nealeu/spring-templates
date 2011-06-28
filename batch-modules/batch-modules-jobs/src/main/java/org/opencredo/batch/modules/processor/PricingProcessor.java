@@ -38,5 +38,8 @@ public class PricingProcessor implements ItemProcessor<Order, Order> {
     public void setStepName(String stepName) {
 		this.stepName = stepName;
 	}
-
+    
+    public void setPricingService(PricingService pricingService) {
+		this.pricingService = pricingService;
+	}
 }

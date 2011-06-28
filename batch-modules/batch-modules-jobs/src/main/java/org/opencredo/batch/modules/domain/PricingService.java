@@ -33,7 +33,7 @@ public class PricingService {
         	if (throwOnNext.get()) {
         		throw new OptimisticLockException("Data was modified by someone else");
         	}
-			Thread.sleep(2000);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			// do nothing
 		}

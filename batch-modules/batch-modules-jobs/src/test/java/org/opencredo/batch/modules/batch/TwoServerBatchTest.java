@@ -40,12 +40,12 @@ import org.springframework.transaction.support.TransactionTemplate;
  * 
  * @author Neale Upstone
  */
-@Ignore("Need to sort autowire issue. contexts[] are not behaving same way as test context")
+//@Ignore("Need to sort autowire issue. contexts[] are not behaving same way as test context")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/batch-applicationContext.xml")
+@ContextConfiguration(locations = {"classpath:/batch-property-placeholders.xml", "classpath:/hibernate-config.xml", "classpath:/batch-infrastructure-single.xml"})
 public class TwoServerBatchTest {
 
-	private static final int NUM_SERVERS = 1;
+	private static final int NUM_SERVERS = 2;
 	
 	private static final String[] configLocation = {"classpath:/batch-applicationContext.xml"};
 	
@@ -58,7 +58,7 @@ public class TwoServerBatchTest {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	private int orderCount = 4;
+	private int orderCount = 400;
 
 	TransactionTemplate dataTxTemplate;
 
