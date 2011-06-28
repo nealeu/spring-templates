@@ -11,9 +11,8 @@ import javax.persistence.OptimisticLockException;
 import org.slf4j.Logger;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedOperation;
-import org.springframework.jmx.export.annotation.ManagedResource;
 
-@ManagedResource
+//@ManagedResource
 public class PricingService {
 
     AtomicInteger pricedCount = new AtomicInteger(0);

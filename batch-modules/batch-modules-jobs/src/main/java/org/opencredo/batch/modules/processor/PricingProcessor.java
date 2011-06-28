@@ -18,8 +18,15 @@ public class PricingProcessor implements ItemProcessor<Order, Order> {
 	private String stepName;
 
 	
+	public PricingProcessor() {
+	}
+	
     public Order process(Order unpriced) {
         logger.info("Job: {}, Step:{}, Pricing " + unpriced.toString(), jobName, stepName);
+        if (pricingService == null) {
+        	logger.error("Pricing service not autowired");
+        	return unpriced; // TODO remove (should use service)
+        }
         return pricingService.priceOrder(unpriced);
     }
 

@@ -35,6 +35,7 @@ public class SimpleBatchTest {
     @Autowired
     JobLauncher jobLauncher;
 
+
     @PersistenceContext
     EntityManager entityManager;
 
@@ -49,7 +50,7 @@ public class SimpleBatchTest {
 
     @Before
     public void createTestData() {
-        dataTxTemplate.execute(new TransactionCallback<Object>() {
+		dataTxTemplate.execute(new TransactionCallback<Object>() {
             public Object doInTransaction(TransactionStatus status) {
                 for (int i = 0; i < orderCount; i++) {
                     Order order = new Order();

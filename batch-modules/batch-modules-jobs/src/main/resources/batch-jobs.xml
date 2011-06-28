@@ -11,7 +11,15 @@
 		http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:mbean-export />
+<!-- 	<bean id="exporter" -->
+<!-- 		class="org.springframework.jmx.export.annotation.AnnotationMBeanExporter"> -->
+<!-- 		<property name="autodetect" value="true" /> -->
+<!-- 		<property name="ensureUniqueRuntimeObjectNames" value="true" /> -->
+<!-- 		<property name="namingStrategy" ref="my.ObjectNamingStrategy" /> -->
+<!-- 	</bean> -->
+	
+	
+	<context:mbean-export default-domain="spring.application.${instanceKey:context-master}" />
 	<context:mbean-server />
 
 	<beans:bean id="neverRetryPolicy"

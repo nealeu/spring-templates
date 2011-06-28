@@ -15,18 +15,29 @@
 		<property name="dataSource" ref="dataDb" />
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 		<property name="jpaDialect">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
 		</property>
 	</bean>
 
-	<jdbc:embedded-database id="dataSource" type="H2"/> <!-- Overrides default that Spring Batch Admin may have defined -->
+
+	<!-- Overrides default dataSource bean that Spring Batch Admin may have defined -->
+<!-- 	<bean id="dataSource" -->
+<!-- 		class="org.springframework.jdbc.datasource.SimpleDriverDataSource"> -->
+<!-- 		<property name="driverClass" value="org.h2.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:h2:shared-data;AUTO_SERVER=TRUE" /> -->
+<!-- 		<property name="username" value="sa" /> -->
+<!-- 		<property name="password" value="" /> -->
+<!-- 	</bean> -->
+
+	<jdbc:embedded-database id="dataSource" type="H2"/>
 
 	<alias alias="dataDb" name="dataSource" />
-	<alias alias="jobDb" name="dataSource" />  
+	<alias alias="jobDb" name="dataSource" />
 
-	<jdbc:initialize-database data-source="jobDb" enabled="true" ignore-failures="DROPS">
-		<jdbc:script location="classpath:/org/springframework/batch/core/schema-drop-h2.sql"/>
-		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql"/>
+	<jdbc:initialize-database data-source="jobDb" enabled="${initDbSchemas:true}" ignore-failures="DROPS">
+		<jdbc:script
+			location="classpath:/org/springframework/batch/core/schema-drop-h2.sql" />
+		<jdbc:script location="classpath:/org/springframework/batch/core/schema-h2.sql" />
 	</jdbc:initialize-database>
 
 	<alias alias="jobTxManager" name="dataTxManager" />
@@ -36,6 +47,7 @@
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
 
-	<batch:job-repository id="jobRepository" data-source="jobDb"
-		transaction-manager="jobTxManager" isolation-level-for-create="DEFAULT"/> 
+	<batch:job-repository id="jobRepository"
+		data-source="jobDb" transaction-manager="jobTxManager"
+		isolation-level-for-create="DEFAULT" />
 </beans>
