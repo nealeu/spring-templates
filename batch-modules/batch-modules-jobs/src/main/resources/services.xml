@@ -6,10 +6,7 @@
 
     <bean id="pricingService" class="org.opencredo.batch.modules.domain.PricingService" />
 
-<!--   stepExecution.getJobExecution().getJobInstance().getJobName() -->
-<!--   stepExecution.getStepName() -->
-
     <bean id="pricingProcessor" scope="step" class="org.opencredo.batch.modules.processor.PricingProcessor" 
-    	p:jobName="#{jobExecutionContext['jobInstance.jobName']}" p:stepName="#{stepExecutionContext['stepName']}"/>
+    	p:jobName="#{jobName}" p:stepName="#{stepName}"/>
 
 </beans>
