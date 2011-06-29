@@ -43,6 +43,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 @ContextConfiguration(locations = {"classpath:/batch-property-placeholders.xml", "classpath:/hibernate-config.xml", "classpath:/batch-infrastructure-single.xml"})
 public class TwoServerBatchTest {
 
+	// Change this to false and things should break, as the jobs from each server will be indistinguishable.
+	private static final boolean createUniqueJobParameters = true;
+	
+	
 	private static final int NUM_SERVERS = 2;
 	
 	private static final String[] configLocation = {"classpath:/batch-applicationContext.xml"};
@@ -130,7 +134,8 @@ public class TwoServerBatchTest {
 					JobLauncher jobLauncher = context.getBean(JobLauncher.class);
 					Job job = context.getBean(Job.class);
 					
-					JobParameters jobParameters = new JobParametersBuilder().addString("thread", Thread.currentThread().getName()).toJobParameters();
+					String sourceServer = createUniqueJobParameters ? Thread.currentThread().getName() : "same";
+					JobParameters jobParameters = new JobParametersBuilder().addString("sourceServer", sourceServer).toJobParameters();
 					try {
 						JobExecution exec = jobLauncher.run(job, jobParameters );
 						while(exec.isRunning()){
@@ -139,7 +144,9 @@ public class TwoServerBatchTest {
 					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
-					latch.countDown();
+					finally {
+						latch.countDown();
+					}
 				}
 			});
 		}
