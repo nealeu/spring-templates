@@ -48,7 +48,7 @@ public class TwoServerBatchTest {
 	private static final String[] configLocation = {"classpath:/batch-applicationContext.xml"};
 	
 	private static BeanFactory contexts[] = new BeanFactory[NUM_SERVERS];
-	private static Executor executor = new SimpleAsyncTaskExecutor("jobThread");
+	private static Executor executor = new SimpleAsyncTaskExecutor("fakeServer");
 	private static CountDownLatch latch = new CountDownLatch(contexts.length);
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
