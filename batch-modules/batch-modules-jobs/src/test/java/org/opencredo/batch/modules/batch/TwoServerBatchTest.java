@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opencredo.batch.modules.domain.Order;
@@ -26,7 +25,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,7 +39,6 @@ import org.springframework.transaction.support.TransactionTemplate;
  * 
  * @author Neale Upstone
  */
-//@Ignore("Need to sort autowire issue. contexts[] are not behaving same way as test context")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/batch-property-placeholders.xml", "classpath:/hibernate-config.xml", "classpath:/batch-infrastructure-single.xml"})
 public class TwoServerBatchTest {
@@ -49,7 +47,7 @@ public class TwoServerBatchTest {
 	
 	private static final String[] configLocation = {"classpath:/batch-applicationContext.xml"};
 	
-	private static ClassPathXmlApplicationContext contexts[] = new ClassPathXmlApplicationContext[NUM_SERVERS];
+	private static BeanFactory contexts[] = new BeanFactory[NUM_SERVERS];
 	private static Executor executor = new SimpleAsyncTaskExecutor("jobThread");
 	private static CountDownLatch latch = new CountDownLatch(contexts.length);
 	
@@ -63,20 +61,13 @@ public class TwoServerBatchTest {
 	TransactionTemplate dataTxTemplate;
 
 	
-//    @Autowired
-//    Job job;
-//
-//    @Autowired
-//    JobLauncher jobLauncher;
-
-    
     @Autowired
     public void setTransactionManager(JpaTransactionManager txManager) {
         this.dataTxTemplate = new TransactionTemplate(txManager);
     }
 
 
-    /** Create parameterized contexts: this must be done after */ 
+    /** Create parameterised contexts: this must be done after */ 
     static public void createInstances(){
 //    	System.err.println(InetAddress.getLocalHost().getHostAddress());
 
@@ -91,20 +82,23 @@ public class TwoServerBatchTest {
     }
 
     /**
-     * Creates a {@link ClassPathXmlApplicationContext} for the supplied context files, configured 
-     * with an additional {@link PropertyPlaceholderConfigurer} to substitute the supplied {@link Properties}
+     * Creates a {@link BeanFactory} for the supplied context files, configured with an 
+     * additional {@link PropertyPlaceholderConfigurer} to substitute the supplied {@link Properties}
      * within the ${...} templates. 
      * 
      * @return a refreshed application context ready to use
      */
-	public static ClassPathXmlApplicationContext createParameterisedContext(String[] locations, Properties props) {
+	public static BeanFactory createParameterisedContext(String[] locations, Properties props) {
 		PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
 		configurer.setProperties(props);
 		configurer.setIgnoreUnresolvablePlaceholders(true);
 		configurer.setOrder(Integer.MAX_VALUE);
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(locations, false);
+		
+		GenericXmlApplicationContext context = new GenericXmlApplicationContext();
+		context.load(locations);
 		context.addBeanFactoryPostProcessor(configurer);
 		context.refresh();
+		context.start();
 		return context;
 	}
     
@@ -125,7 +119,6 @@ public class TwoServerBatchTest {
             }
         });
     }
-
 
 
     public void runParallelJobs() throws InterruptedException {
